@@ -1,0 +1,13 @@
+# Stage 2 (analyze.sh) — CPU only:
+numpy
+pandas
+pyarrow
+scipy
+matplotlib
+seaborn
+python-chess
+
+# Stage 1 (collect.sh) — additionally needs a GPU and:
+torch
+transformers
+tqdm

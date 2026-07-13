@@ -1,0 +1,101 @@
+# SFT Training Configuration Example
+#
+# This configuration file is for Supervised Fine-Tuning (SFT) on a pretrained model.
+# It uses chat format with thinking tokens for chain-of-thought reasoning.
+
+model:
+  pretrained_model: "${REPO_ROOT}/LLM-Pretraining/checkpoints/chess_qwen_100m/hf_scratch_Qwen/Qwen3-0.6B_LanTokenizer_dataNA_ctx1024_L20H16E1024_bs32_lr0.001__shards/final_step26528/hf_model"  
+  block_size: 2048 
+
+tokenizer:
+  name: "LanTokenizerSFT"  # Use SFT-enabled tokenizer
+  include_move_numbers: false
+  include_black_tripledots: false
+  bos: "<bos>"
+  eos: "<eos>"
+  unk: "<unk>"
+  keep_result: false
+  include_env_tokens: true
+  # include_reward_tokens: true
+
+data:
+  # Path to SFT training data (JSONL format)
+  # Each line should be: {"prompt": "...", "response": "...", "system": "..."}
+  # Can be a folder path - will find all .json and .jsonl files inside
+  data_name: "cot_data_qwen_puzzles_no_verify_multi_turn_with_human"
+  # Specify a folder — all .json/.jsonl files found recursively inside will be used.
+  # Override per-model via --train-files (see run_sft.sh / TRAIN_DATA_DIR).
+  train_files:
+    - "${REPO_ROOT}/LLM-Pretraining/data/sft/cot_data_puzzle_seq_qwen/qwen06b_final_step26528"
+  
+  # Hold out last N files from train_files for evaluation (like pretrain config)
+  eval_holdout: 2
+
+  
+  # Optional: additional evaluation data (can be empty if using eval_holdout)
+  # eval_files:
+  #   - "${REPO_ROOT}/LLM-Pretraining/data/chess/cot_data/some_specific_file.json"
+  
+  # SFT-specific settings
+  sft:
+    mask_prompt: true              # Mask prompt tokens in loss (only train on response)
+    cot_field: "cot_by_method.trajectory_sep.cot_format_no_labels"
+    multi_turn: true
+
+training:
+  epochs: 3
+  batch_size: 4                    # Smaller batch size for SFT (longer sequences)
+  eval_batch_size: 2
+  
+  # Optimizer settings
+  optimizer:
+    name: "adamw"
+    lr: 5.0e-5                     # Lower learning rate for fine-tuning
+    weight_decay: 0.01
+    betas: [0.9, 0.95]
+  
+  # Scheduler settings
+  scheduler:
+    name: "cosine"
+    warmup_steps: 50              # Fewer warmup steps for fine-tuning
+    eta_min: 1.0e-5
+  
+  # Training optimizations
+  gradient_accumulation_steps: 16  # Effective batch size = 8 * 4 = 32
+  max_grad_norm: 1.0               # Gradient clipping
+  
+  # Regularization
+  label_smoothing: 0.0             # Optional: label smoothing (0.0 = disabled)
+  
+  # Data loading
+  num_workers: 4
+  prefetch_factor: 2
+  persistent_workers: true
+  
+  # Logging and checkpointing
+  save_dir: "checkpoints/sft"
+  save_interval: 100               # Save checkpoint every N steps
+  log_interval: 50                 # Log every N steps
+  eval_interval: 10000               # Evaluate every N steps
+  eval_max_steps: 50               # Number of eval batches
+  
+  # Model compilation (PyTorch 2.0+)
+  # compile_model: false             # Set to true for additional speedup
+  # compile_mode: "reduce-overhead"
+  
+  # Load pretrained weights
+  pretrained_weights: "${REPO_ROOT}/LLM-Pretraining/checkpoints/chess_qwen_100m/hf_scratch_Qwen/Qwen3-0.6B_LanTokenizer_dataNA_ctx1024_L20H16E1024_bs32_lr0.001__shards/final_step26528/model.safetensors"
+  
+  # Resume from checkpoint (optional)
+  # resume: "checkpoints/sft/run_name/step1000"
+
+logging:
+  backend: "wandb"
+  project: "chess-llm-sft-qwen-200m-multiturn"
+  entity: "your-wandb-entity"                     # Your wandb entity/username
+  notes: "SFT with thinking tokens"
+  tags:
+    - "sft"
+    - "thinking"
+    - "chess"
+

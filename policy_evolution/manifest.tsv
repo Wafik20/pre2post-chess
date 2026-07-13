@@ -1,0 +1,16 @@
+# Stage-1 manifest read by collect.sh — one checkpoint per line.
+# Whitespace-separated; blank lines and #-comments are ignored.
+#
+#   stage          step          model_path                       rollout_jsonl
+#   {pretrain,sft,rl}  subdir name  HF checkpoint (config+vocab)   128-rollout generation/0.jsonl
+#
+# Edit the paths below to point at your checkpoints and their 128-rollout evals.
+# Outputs go to  $RESULTS_ROOT/$CFG/<stage>/<step>/raw_scores.parquet.
+
+pretrain  step_final  /path/to/pretrain/final            /path/to/pretrain/eval/generation/0.jsonl
+sft       step_final  /path/to/sft/final                 /path/to/sft/eval/generation/0.jsonl
+rl        step_50     /path/to/rl/global_step_50         /path/to/rl/eval/step_50/generation/0.jsonl
+rl        step_100    /path/to/rl/global_step_100        /path/to/rl/eval/step_100/generation/0.jsonl
+rl        step_250    /path/to/rl/global_step_250        /path/to/rl/eval/step_250/generation/0.jsonl
+rl        step_500    /path/to/rl/global_step_500        /path/to/rl/eval/step_500/generation/0.jsonl
+rl        step_750    /path/to/rl/global_step_750        /path/to/rl/eval/step_750/generation/0.jsonl

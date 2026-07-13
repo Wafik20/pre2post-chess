@@ -1,0 +1,81 @@
+=== analyze.sh (Stage 2) ===
+  config        = 6p5e18_50m_alpha0.200_beta0.023_n128
+  RESULTS_ROOT  = /scratch/js15262/Chess-RL/policy_evolution/results
+  rl_steps      = 50 100 250 750 1000
+  top_k         = 3   example_bracket = test_B5
+
+[run_policy_analysis] cfg=6p5e18_50m_alpha0.200_beta0.023_n128
+[run_policy_analysis] out_dir=/scratch/js15262/Chess-RL/policy_evolution/results/6p5e18_50m_alpha0.200_beta0.023_n128/policy_analysis_topk3_B5
+[load] pretrain 1945 puzzles, sft 1945 puzzles  (54.2s)
+[load] rl step_50 1477 puzzles  (34.1s)
+[load] rl step_100 872 puzzles  (19.7s)
+[load] rl step_250 1477 puzzles  (33.0s)
+[load] rl step_750 1477 puzzles  (33.5s)
+[load] rl step_1000 1477 puzzles  (32.3s)
+[filter] restricted to B1-B5: pretrain 1477, sft 1477 states; rl per-step ~1477
+
+[sharpening] global + per-state, KL projection + logit-linear
+  pretrain→sft: KL α*=0.540 (med=0.594, IQR=[0.409,0.828])  explained=0.026 (med=0.095)  logit a=0.566 (med=0.584)  R²=0.399 (med=0.447)
+  sft→rl_50: KL α*=1.106 (med=1.129, IQR=[0.994,1.288])  explained=0.091 (med=0.213)  logit a=0.957 (med=0.996)  R²=0.766 (med=0.835)
+  sft→rl_100: KL α*=1.239 (med=1.294, IQR=[1.100,1.499])  explained=0.218 (med=0.422)  logit a=0.994 (med=1.036)  R²=0.707 (med=0.788)
+  sft→rl_250: KL α*=1.275 (med=1.351, IQR=[1.109,1.664])  explained=0.201 (med=0.433)  logit a=1.006 (med=1.064)  R²=0.686 (med=0.765)
+  sft→rl_750: KL α*=1.385 (med=1.576, IQR=[1.176,2.164])  explained=0.232 (med=0.536)  logit a=1.133 (med=1.176)  R²=0.645 (med=0.720)
+  sft→rl_1000: KL α*=1.431 (med=1.658, IQR=[1.222,2.359])  explained=0.239 (med=0.578)  logit a=1.077 (med=1.139)  R²=0.588 (med=0.678)
+
+[TS] computing trace sensitivity (KL form)
+  TS_pretrain (≈0)  = 0.00000
+  TS_sft            = 0.52352
+  TS_rl  step_50    = 0.45272
+  TS_rl  step_100   = 0.36888
+  TS_rl  step_250   = 0.38794
+  TS_rl  step_750   = 0.32717
+  TS_rl  step_1000  = 0.28260
+
+[collapse] computing D_marg, D_trace, C_trace per RL step
+  step_50   : D_marg=0.0368  D_trace=0.0162  C_trace=0.0205  frac_nearest_correct=0.534
+  step_100  : D_marg=0.0520  D_trace=0.0129  C_trace=0.0390  frac_nearest_correct=0.669
+  step_250  : D_marg=0.0725  D_trace=0.0150  C_trace=0.0575  frac_nearest_correct=0.561
+  step_750  : D_marg=0.1044  D_trace=0.0148  C_trace=0.0895  frac_nearest_correct=0.572
+  step_1000 : D_marg=0.1194  D_trace=0.0152  C_trace=0.1042  frac_nearest_correct=0.586
+
+[categorize] assigning categories at every RL step
+  counts per RL step:
+category  gt_amplification  topk_correction  ...  gt_regression  other
+rl_step                                      ...                      
+50                     790               37  ...             48    468
+100                    614               16  ...             18    185
+250                    875               39  ...             65    351
+750                    897               44  ...             55    328
+1000                   919               47  ...             52    302
+
+[5 rows x 6 columns]
+
+[summary] building per-step summary CSV
+
+[plot] 01_sharpening_alpha.png
+[plot] 01b_sharpening_metrics.png
+[plot] 01c_sharpening_distributions.png
+[plot] 02_trace_sensitivity.png
+[plot] 03_rl_sft_trace_collapse.png
+[plot] 04_entropy_pretrain_vs_sft.png
+[summary] SFT baseline: pass@1=0.148  pass@8=0.421  pass@16=0.510
+[plot] 05_category_summary.png
+[plot] 08_pass_at_k_decomposition.png
+[plot] 09_pass_at_k_per_category.png
+[plot] 06_category_per_bin.png
+[plot] 07_category_per_step.png
+[plot] 06b_category_per_bin_fraction.{png,pdf}
+[plot] 07b_category_per_step_fraction.{png,pdf}
+
+[categories] rendering example states per category (one figure per puzzle)
+  gt_amplification: 5 puzzle figures rendered
+  topk_correction: 5 puzzle figures rendered
+  tail_discovery: 5 puzzle figures rendered
+  wrong_mode_amplification: 5 puzzle figures rendered
+  gt_regression: 5 puzzle figures rendered
+  other: 5 puzzle figures rendered
+
+[done] all outputs in /scratch/js15262/Chess-RL/policy_evolution/results/6p5e18_50m_alpha0.200_beta0.023_n128/policy_analysis_topk3_B5
+
+done — see the policy_analysis output dir under /scratch/js15262/Chess-RL/policy_evolution/results/
+ANALYZE_EXIT=0

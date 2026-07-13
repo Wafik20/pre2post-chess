@@ -1,0 +1,12 @@
+{
+  "default_max_train_files": 85,
+  "entries_by_spec": [
+    {
+      "total_compute": "6p5e19",
+      "modelsize": "680m",
+      "alpha": "0.750",
+      "beta": "0.030",
+      "max_train_files": 85
+    }
+  ]
+}
