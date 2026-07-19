@@ -131,7 +131,7 @@ Only meaningful inside `interactive_mode`.
 - **Enabled (`ENABLE_THINKING_MODE=True` / `THINKING=True`,
   `thinking_mode.enable=True`)**: the model produces an explicit reasoning /
   chain-of-thought phase before committing to a move. Dispatches to
-  `generate_multi_turn_sequences`.
+  `generate_multi_turn_sequences`. If the thinking mode is enabled, please make sure the prompts end with `<T>`.
 - **Disabled**: the model answers directly with no separate thinking phase.
   Dispatches to `generate_multi_turn_sequences_no_stop`.
 
