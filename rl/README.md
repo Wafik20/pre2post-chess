@@ -117,7 +117,7 @@ combination (`verl/trainer/ppo/ray_trainer.py`,
 
 - **Enabled (`MULTI_TURN=True`, `interactive_mode.enable=True`)**: the rollout is
   a **multi-turn conversation with the chess environment**. The model generates
-  until it emits an environment-call token; the environment responds (e.g. with
+  until it emits an environment-call token `<call_env>`; the environment responds (e.g. with
   board state / move feedback); generation resumes. This repeats for up to
   `max_env_calls` rounds. This is the agentic setting and the default for
   training (`generate_multi_turn_sequences`).
@@ -131,7 +131,7 @@ Only meaningful inside `interactive_mode`.
 - **Enabled (`ENABLE_THINKING_MODE=True` / `THINKING=True`,
   `thinking_mode.enable=True`)**: the model produces an explicit reasoning /
   chain-of-thought phase before committing to a move. Dispatches to
-  `generate_multi_turn_sequences`.
+  `generate_multi_turn_sequences`. If the thinking mode is enabled, please make sure the prompts end with `<T>`.
 - **Disabled**: the model answers directly with no separate thinking phase.
   Dispatches to `generate_multi_turn_sequences_no_stop`.
 
