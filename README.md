@@ -1,6 +1,4 @@
-# ♟️ Understanding Reasoning Pretraining to Post-training
-
-**Official implementation of *"Understanding Reasoning Pretraining to Post-training"***
+# ♟️ Official implementation of "Understanding Reasoning Pretraining to Post-training" Paper
 
 [![Paper](https://img.shields.io/badge/📄%20Paper-arXiv%3A2607.16097-b31b1b.svg)](https://arxiv.org/pdf/2607.16097)
 
