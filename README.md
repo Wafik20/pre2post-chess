@@ -66,7 +66,9 @@ If you find this work useful, please cite:
 
 ```bibtex
 @article{pre2post-chess,
-  title   = {Understanding Reasoning Pretraining to Post-training},
+  title   = {Understanding Reasoning from Pretraining to Post-Training},
+  author  = {Shen, Jingyan and Li, Ang and Rahman, Salman and Sun, Yifan and
+             Goldblum, Micah and Telgarsky, Matus and Izmailov, Pavel},
   journal = {arXiv preprint arXiv:2607.16097},
   year    = {2026},
   url     = {https://arxiv.org/pdf/2607.16097}
