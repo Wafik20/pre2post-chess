@@ -82,6 +82,14 @@ After training, convert FSDP checkpoints to HuggingFace format:
 LARGE_DIR=../results/rl/<...>/<hparam_tag> bash convert_to_hf_all.sh
 ```
 
+#### Time estimate
+
+On 8× H200 with the **50M** model, train batch 256, group size 8 (2048
+rollouts/step), 2560-token responses: **≈ 30 s/step** (~50 min per 100 steps,
+~8 h per 1000). Step time scales roughly linearly with total rollouts
+(`batch × group`) and response length, and drifts up as responses grow toward
+`RES_LENGTH`. Time a few steps before extrapolating a different config.
+
 ### Evaluate
 
 `eval_bash/verl_eval.sh` is the single-checkpoint engine;
